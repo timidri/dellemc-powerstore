@@ -51,7 +51,7 @@ context.debug("Entered get")
   def create(context, name, should)
     context.creating(name) do
       #binding.pry
-      new_hash = build_hash(should)
+      new_hash = build_create_hash(should)
       new_hash.delete("id")
       response = self.class.invoke_create(context, should, new_hash)
 
@@ -69,7 +69,7 @@ context.debug("Entered get")
 
   def update(context, name, should)
     context.updating(name) do
-      new_hash = build_hash(should)
+      new_hash = build_update_hash(should)
       new_hash.delete("id")
       response = self.class.invoke_update(context, should, new_hash)
 
@@ -83,6 +83,38 @@ context.debug("Entered get")
   rescue Exception => ex
     Puppet.alert("Exception during flush. ex is #{ex} and backtrace is #{ex.backtrace}")
     raise
+  end
+
+  def build_create_hash(resource)
+    remote_system = {}
+    remote_system["data_network_latency"] = resource[:data_network_latency] unless resource[:data_network_latency].nil?
+    remote_system["description"] = resource[:description] unless resource[:description].nil?
+    remote_system["discovery_chap_mode"] = resource[:discovery_chap_mode] unless resource[:discovery_chap_mode].nil?
+    remote_system["import_chap_info"] = resource[:import_chap_info] unless resource[:import_chap_info].nil?
+    remote_system["iscsi_addresses"] = resource[:iscsi_addresses] unless resource[:iscsi_addresses].nil?
+    remote_system["management_address"] = resource[:management_address] unless resource[:management_address].nil?
+    remote_system["name"] = resource[:name] unless resource[:name].nil?
+    remote_system["remote_password"] = resource[:remote_password] unless resource[:remote_password].nil?
+    remote_system["remote_username"] = resource[:remote_username] unless resource[:remote_username].nil?
+    remote_system["session_chap_mode"] = resource[:session_chap_mode] unless resource[:session_chap_mode].nil?
+    remote_system["type"] = resource[:type] unless resource[:type].nil?
+    return remote_system
+  end
+
+  def build_update_hash(resource)
+    remote_system = {}
+    remote_system["data_network_latency"] = resource[:data_network_latency] unless resource[:data_network_latency].nil?
+    remote_system["description"] = resource[:description] unless resource[:description].nil?
+    remote_system["management_address"] = resource[:management_address] unless resource[:management_address].nil?
+    remote_system["name"] = resource[:name] unless resource[:name].nil?
+    remote_system["remote_password"] = resource[:remote_password] unless resource[:remote_password].nil?
+    remote_system["remote_username"] = resource[:remote_username] unless resource[:remote_username].nil?
+    return remote_system
+  end
+
+  def build_delete_hash(resource)
+    remote_system = {}
+    return remote_system
   end
 
   def build_hash(resource)
@@ -113,8 +145,8 @@ context.debug("Entered get")
   # end
 
   def delete(context, should)
-    new_hash = build_hash(should)
-    response = self.class.invoke_delete(context, should) # , new_hash)
+    new_hash = build_delete_hash(should)
+    response = self.class.invoke_delete(context, should, new_hash)
     if response.is_a? Net::HTTPSuccess
       should[:ensure] = 'absent'
       Puppet.info "Added 'absent' to property_hash"

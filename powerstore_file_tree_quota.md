@@ -1,7 +1,7 @@
-Document: "dellemc.swagger"
+Document: "swagger"
 
 
-Path: "/varhttps://github.com/aws/aws-sdk-go-v2/tree/master/dellemc.swagger.json")
+Path: "/varhttps://github.com/aws/aws-sdk-go-v2/tree/master/swagger.json")
 
 ## File_tree_quota
 
@@ -23,11 +23,11 @@ powerstore_file_tree_quota {
 | ------------- | ------------- | ------------- |
 |description | String | false |
 |file_system_id | String | true |
-|hard_limit | Integer[0, 9223372036854775808] | false |
+|hard_limit | Integer[0,9223372036854775807] | false |
 |id | String | true |
 |is_user_quotas_enforced | Boolean | false |
 |path | String | true |
-|soft_limit | Integer[0, 9223372036854775808] | false |
+|soft_limit | Integer[0,9223372036854775807] | false |
 
 
 

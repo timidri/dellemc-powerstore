@@ -51,7 +51,7 @@ context.debug("Entered get")
   def create(context, name, should)
     context.creating(name) do
       #binding.pry
-      new_hash = build_hash(should)
+      new_hash = build_create_hash(should)
       new_hash.delete("id")
       response = self.class.invoke_create(context, should, new_hash)
 
@@ -69,7 +69,7 @@ context.debug("Entered get")
 
   def update(context, name, should)
     context.updating(name) do
-      new_hash = build_hash(should)
+      new_hash = build_update_hash(should)
       new_hash.delete("id")
       response = self.class.invoke_update(context, should, new_hash)
 
@@ -85,8 +85,29 @@ context.debug("Entered get")
     raise
   end
 
+  def build_create_hash(resource)
+    storage_container = {}
+    storage_container["name"] = resource[:name] unless resource[:name].nil?
+    storage_container["quota"] = resource[:quota] unless resource[:quota].nil?
+    return storage_container
+  end
+
+  def build_update_hash(resource)
+    storage_container = {}
+    storage_container["name"] = resource[:name] unless resource[:name].nil?
+    storage_container["quota"] = resource[:quota] unless resource[:quota].nil?
+    return storage_container
+  end
+
+  def build_delete_hash(resource)
+    storage_container = {}
+    storage_container["force"] = resource[:force] unless resource[:force].nil?
+    return storage_container
+  end
+
   def build_hash(resource)
     storage_container = {}
+    storage_container["force"] = resource[:force] unless resource[:force].nil?
     storage_container["id"] = resource[:id] unless resource[:id].nil?
     storage_container["name"] = resource[:name] unless resource[:name].nil?
     storage_container["quota"] = resource[:quota] unless resource[:quota].nil?
@@ -105,8 +126,8 @@ context.debug("Entered get")
   # end
 
   def delete(context, should)
-    new_hash = build_hash(should)
-    response = self.class.invoke_delete(context, should) # , new_hash)
+    new_hash = build_delete_hash(should)
+    response = self.class.invoke_delete(context, should, new_hash)
     if response.is_a? Net::HTTPSuccess
       should[:ensure] = 'absent'
       Puppet.info "Added 'absent' to property_hash"
@@ -278,6 +299,7 @@ context.debug("Entered get")
       items.collect do |item|
         hash = {
 
+          force: item['force'],
           id: item['id'],
           name: item['name'],
           quota: item['quota'],

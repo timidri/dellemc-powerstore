@@ -1,7 +1,7 @@
-Document: "dellemc.swagger"
+Document: "swagger"
 
 
-Path: "/varhttps://github.com/aws/aws-sdk-go-v2/tree/master/dellemc.swagger.json")
+Path: "/varhttps://github.com/aws/aws-sdk-go-v2/tree/master/swagger.json")
 
 ## File_interface_route
 
@@ -21,9 +21,9 @@ powerstore_file_interface_route {
 | ------------- | ------------- | ------------- |
 |destination | String | false |
 |file_interface_id | String | true |
-|gateway | String[0,45] | false |
+|gateway | String[1,45] | false |
 |id | String | true |
-|prefix_length | Integer[1, 128] | false |
+|prefix_length | Integer[1,128] | false |
 
 
 

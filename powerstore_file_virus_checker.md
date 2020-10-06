@@ -1,7 +1,7 @@
-Document: "dellemc.swagger"
+Document: "swagger"
 
 
-Path: "/varhttps://github.com/aws/aws-sdk-go-v2/tree/master/dellemc.swagger.json")
+Path: "/varhttps://github.com/aws/aws-sdk-go-v2/tree/master/swagger.json")
 
 ## File_virus_checker
 

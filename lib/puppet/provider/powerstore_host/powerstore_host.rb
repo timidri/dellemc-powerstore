@@ -51,7 +51,7 @@ context.debug("Entered get")
   def create(context, name, should)
     context.creating(name) do
       #binding.pry
-      new_hash = build_hash(should)
+      new_hash = build_create_hash(should)
       new_hash.delete("id")
       response = self.class.invoke_create(context, should, new_hash)
 
@@ -69,7 +69,7 @@ context.debug("Entered get")
 
   def update(context, name, should)
     context.updating(name) do
-      new_hash = build_hash(should)
+      new_hash = build_update_hash(should)
       new_hash.delete("id")
       response = self.class.invoke_update(context, should, new_hash)
 
@@ -83,6 +83,30 @@ context.debug("Entered get")
   rescue Exception => ex
     Puppet.alert("Exception during flush. ex is #{ex} and backtrace is #{ex.backtrace}")
     raise
+  end
+
+  def build_create_hash(resource)
+    host = {}
+    host["description"] = resource[:description] unless resource[:description].nil?
+    host["initiators"] = resource[:initiators] unless resource[:initiators].nil?
+    host["name"] = resource[:name] unless resource[:name].nil?
+    host["os_type"] = resource[:os_type] unless resource[:os_type].nil?
+    return host
+  end
+
+  def build_update_hash(resource)
+    host = {}
+    host["add_initiators"] = resource[:add_initiators] unless resource[:add_initiators].nil?
+    host["description"] = resource[:description] unless resource[:description].nil?
+    host["modify_initiators"] = resource[:modify_initiators] unless resource[:modify_initiators].nil?
+    host["name"] = resource[:name] unless resource[:name].nil?
+    host["remove_initiators"] = resource[:remove_initiators] unless resource[:remove_initiators].nil?
+    return host
+  end
+
+  def build_delete_hash(resource)
+    host = {}
+    return host
   end
 
   def build_hash(resource)
@@ -110,8 +134,8 @@ context.debug("Entered get")
   # end
 
   def delete(context, should)
-    new_hash = build_hash(should)
-    response = self.class.invoke_delete(context, should) # , new_hash)
+    new_hash = build_delete_hash(should)
+    response = self.class.invoke_delete(context, should, new_hash)
     if response.is_a? Net::HTTPSuccess
       should[:ensure] = 'absent'
       Puppet.info "Added 'absent' to property_hash"

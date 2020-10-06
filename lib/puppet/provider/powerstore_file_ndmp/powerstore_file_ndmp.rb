@@ -51,7 +51,7 @@ context.debug("Entered get")
   def create(context, name, should)
     context.creating(name) do
       #binding.pry
-      new_hash = build_hash(should)
+      new_hash = build_create_hash(should)
       new_hash.delete("id")
       response = self.class.invoke_create(context, should, new_hash)
 
@@ -69,7 +69,7 @@ context.debug("Entered get")
 
   def update(context, name, should)
     context.updating(name) do
-      new_hash = build_hash(should)
+      new_hash = build_update_hash(should)
       new_hash.delete("id")
       response = self.class.invoke_update(context, should, new_hash)
 
@@ -83,6 +83,26 @@ context.debug("Entered get")
   rescue Exception => ex
     Puppet.alert("Exception during flush. ex is #{ex} and backtrace is #{ex.backtrace}")
     raise
+  end
+
+  def build_create_hash(resource)
+    file_ndmp = {}
+    file_ndmp["nas_server_id"] = resource[:nas_server_id] unless resource[:nas_server_id].nil?
+    file_ndmp["password"] = resource[:password] unless resource[:password].nil?
+    file_ndmp["user_name"] = resource[:user_name] unless resource[:user_name].nil?
+    return file_ndmp
+  end
+
+  def build_update_hash(resource)
+    file_ndmp = {}
+    file_ndmp["password"] = resource[:password] unless resource[:password].nil?
+    file_ndmp["user_name"] = resource[:user_name] unless resource[:user_name].nil?
+    return file_ndmp
+  end
+
+  def build_delete_hash(resource)
+    file_ndmp = {}
+    return file_ndmp
   end
 
   def build_hash(resource)
@@ -106,8 +126,8 @@ context.debug("Entered get")
   # end
 
   def delete(context, should)
-    new_hash = build_hash(should)
-    response = self.class.invoke_delete(context, should) # , new_hash)
+    new_hash = build_delete_hash(should)
+    response = self.class.invoke_delete(context, should, new_hash)
     if response.is_a? Net::HTTPSuccess
       should[:ensure] = 'absent'
       Puppet.info "Added 'absent' to property_hash"
