@@ -1,7 +1,7 @@
-Document: "dellemc.swagger"
+Document: "swagger"
 
 
-Path: "/varhttps://github.com/aws/aws-sdk-go-v2/tree/master/dellemc.swagger.json")
+Path: "/varhttps://github.com/aws/aws-sdk-go-v2/tree/master/swagger.json")
 
 ## Remote_system
 
@@ -14,7 +14,7 @@ powerstore_remote_system {
   discovery_chap_mode => "discovery_chap_mode (optional)",
   import_chap_info => "import_chap_info (optional)",
   iscsi_addresses => "iscsi_addresses (optional)",
-  management_address => "management_address (optional)",
+  management_address => "management_address",
   name => "name (optional)",
   remote_password => "remote_password (optional)",
   remote_username => "remote_username (optional)",
@@ -25,17 +25,17 @@ powerstore_remote_system {
 
 | Name        | Type           | Required       |
 | ------------- | ------------- | ------------- |
-|data_network_latency | String | false |
-|description | String[0,256] | false |
-|discovery_chap_mode | String | false |
-|import_chap_info | Hash | false |
-|iscsi_addresses | Array | false |
-|management_address | String | false |
-|name | String[0,128] | false |
+|data_network_latency | Enum['Low','High'] | false |
+|description | String | false |
+|discovery_chap_mode | Enum['Disabled','Single','Mutual'] | false |
+|import_chap_info | Struct[{Optional[target_discovery_password] => String, Optional[target_discovery_username] => String, Optional[target_session_password] => String, Optional[target_session_username] => String, Optional[initiator_discovery_password] => String, Optional[initiator_discovery_username] => String, Optional[initiator_session_password] => String, Optional[initiator_session_username] => String, }] | false |
+|iscsi_addresses | Array[String] | false |
+|management_address | String | true |
+|name | String | false |
 |remote_password | String | false |
 |remote_username | String | false |
-|session_chap_mode | String | false |
-|type | String | false |
+|session_chap_mode | Enum['Disabled','Single','Mutual'] | false |
+|type | Enum['PowerStore','Unity','VNX','PS_Equallogic','Storage_Center','XtremIO'] | false |
 
 
 

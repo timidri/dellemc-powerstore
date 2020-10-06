@@ -51,7 +51,7 @@ context.debug("Entered get")
   def create(context, name, should)
     context.creating(name) do
       #binding.pry
-      new_hash = build_hash(should)
+      new_hash = build_create_hash(should)
       new_hash.delete("id")
       response = self.class.invoke_create(context, should, new_hash)
 
@@ -69,7 +69,7 @@ context.debug("Entered get")
 
   def update(context, name, should)
     context.updating(name) do
-      new_hash = build_hash(should)
+      new_hash = build_update_hash(should)
       new_hash.delete("id")
       response = self.class.invoke_update(context, should, new_hash)
 
@@ -83,6 +83,38 @@ context.debug("Entered get")
   rescue Exception => ex
     Puppet.alert("Exception during flush. ex is #{ex} and backtrace is #{ex.backtrace}")
     raise
+  end
+
+  def build_create_hash(resource)
+    smb_share = {}
+    smb_share["description"] = resource[:description] unless resource[:description].nil?
+    smb_share["file_system_id"] = resource[:file_system_id] unless resource[:file_system_id].nil?
+    smb_share["is_ABE_enabled"] = resource[:is_abe_enabled] unless resource[:is_abe_enabled].nil?
+    smb_share["is_branch_cache_enabled"] = resource[:is_branch_cache_enabled] unless resource[:is_branch_cache_enabled].nil?
+    smb_share["is_continuous_availability_enabled"] = resource[:is_continuous_availability_enabled] unless resource[:is_continuous_availability_enabled].nil?
+    smb_share["is_encryption_enabled"] = resource[:is_encryption_enabled] unless resource[:is_encryption_enabled].nil?
+    smb_share["name"] = resource[:name] unless resource[:name].nil?
+    smb_share["offline_availability"] = resource[:offline_availability] unless resource[:offline_availability].nil?
+    smb_share["path"] = resource[:path] unless resource[:path].nil?
+    smb_share["umask"] = resource[:umask] unless resource[:umask].nil?
+    return smb_share
+  end
+
+  def build_update_hash(resource)
+    smb_share = {}
+    smb_share["description"] = resource[:description] unless resource[:description].nil?
+    smb_share["is_ABE_enabled"] = resource[:is_abe_enabled] unless resource[:is_abe_enabled].nil?
+    smb_share["is_branch_cache_enabled"] = resource[:is_branch_cache_enabled] unless resource[:is_branch_cache_enabled].nil?
+    smb_share["is_continuous_availability_enabled"] = resource[:is_continuous_availability_enabled] unless resource[:is_continuous_availability_enabled].nil?
+    smb_share["is_encryption_enabled"] = resource[:is_encryption_enabled] unless resource[:is_encryption_enabled].nil?
+    smb_share["offline_availability"] = resource[:offline_availability] unless resource[:offline_availability].nil?
+    smb_share["umask"] = resource[:umask] unless resource[:umask].nil?
+    return smb_share
+  end
+
+  def build_delete_hash(resource)
+    smb_share = {}
+    return smb_share
   end
 
   def build_hash(resource)
@@ -113,8 +145,8 @@ context.debug("Entered get")
   # end
 
   def delete(context, should)
-    new_hash = build_hash(should)
-    response = self.class.invoke_delete(context, should) # , new_hash)
+    new_hash = build_delete_hash(should)
+    response = self.class.invoke_delete(context, should, new_hash)
     if response.is_a? Net::HTTPSuccess
       should[:ensure] = 'absent'
       Puppet.info "Added 'absent' to property_hash"

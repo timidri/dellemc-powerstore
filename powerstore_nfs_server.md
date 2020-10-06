@@ -1,7 +1,7 @@
-Document: "dellemc.swagger"
+Document: "swagger"
 
 
-Path: "/varhttps://github.com/aws/aws-sdk-go-v2/tree/master/dellemc.swagger.json")
+Path: "/varhttps://github.com/aws/aws-sdk-go-v2/tree/master/swagger.json")
 
 ## Nfs_server
 
@@ -25,7 +25,7 @@ powerstore_nfs_server {
 | Name        | Type           | Required       |
 | ------------- | ------------- | ------------- |
 |credentials_cache_ttl | Integer[0, 2147483647] | false |
-|host_name | String[0,255] | false |
+|host_name | String[1,255] | false |
 |id | String | true |
 |is_extended_credentials_enabled | Boolean | false |
 |is_nfsv3_enabled | Boolean | false |

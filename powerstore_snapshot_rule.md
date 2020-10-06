@@ -1,7 +1,7 @@
-Document: "dellemc.swagger"
+Document: "swagger"
 
 
-Path: "/varhttps://github.com/aws/aws-sdk-go-v2/tree/master/dellemc.swagger.json")
+Path: "/varhttps://github.com/aws/aws-sdk-go-v2/tree/master/swagger.json")
 
 ## Snapshot_rule
 
@@ -10,21 +10,23 @@ Path: "/varhttps://github.com/aws/aws-sdk-go-v2/tree/master/dellemc.swagger.json
 ```puppet
 powerstore_snapshot_rule {
   days_of_week => "days_of_week (optional)",
-  desired_retention => "desired_retention (optional)",
+  delete_snaps => "delete_snaps (optional)",
+  desired_retention => "desired_retention",
   id => "id",
   interval => "interval (optional)",
-  name => "name (optional)",
+  name => "name",
   time_of_day => "time_of_day (optional)",
 }
 ```
 
 | Name        | Type           | Required       |
 | ------------- | ------------- | ------------- |
-|days_of_week | Array | false |
-|desired_retention | Integer[1, 8760] | false |
+|days_of_week | Array[Enum['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday']] | false |
+|delete_snaps | Boolean | false |
+|desired_retention | Integer[1, 8760] | true |
 |id | String | true |
-|interval | String | false |
-|name | String | false |
+|interval | Enum['Five_Minutes','Fifteen_Minutes','Thirty_Minutes','One_Hour','Two_Hours','Three_Hours','Four_Hours','Six_Hours','Eight_Hours','Twelve_Hours','One_Day'] | false |
+|name | String | true |
 |time_of_day | String | false |
 
 

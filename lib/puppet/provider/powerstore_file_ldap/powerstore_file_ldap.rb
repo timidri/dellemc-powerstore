@@ -51,7 +51,7 @@ context.debug("Entered get")
   def create(context, name, should)
     context.creating(name) do
       #binding.pry
-      new_hash = build_hash(should)
+      new_hash = build_create_hash(should)
       new_hash.delete("id")
       response = self.class.invoke_create(context, should, new_hash)
 
@@ -69,7 +69,7 @@ context.debug("Entered get")
 
   def update(context, name, should)
     context.updating(name) do
-      new_hash = build_hash(should)
+      new_hash = build_update_hash(should)
       new_hash.delete("id")
       response = self.class.invoke_update(context, should, new_hash)
 
@@ -83,6 +83,50 @@ context.debug("Entered get")
   rescue Exception => ex
     Puppet.alert("Exception during flush. ex is #{ex} and backtrace is #{ex.backtrace}")
     raise
+  end
+
+  def build_create_hash(resource)
+    file_ldap = {}
+    file_ldap["addresses"] = resource[:addresses] unless resource[:addresses].nil?
+    file_ldap["authentication_type"] = resource[:authentication_type] unless resource[:authentication_type].nil?
+    file_ldap["base_DN"] = resource[:base_dn] unless resource[:base_dn].nil?
+    file_ldap["bind_DN"] = resource[:bind_dn] unless resource[:bind_dn].nil?
+    file_ldap["bind_password"] = resource[:bind_password] unless resource[:bind_password].nil?
+    file_ldap["is_smb_account_used"] = resource[:is_smb_account_used] unless resource[:is_smb_account_used].nil?
+    file_ldap["is_verify_server_certificate"] = resource[:is_verify_server_certificate] unless resource[:is_verify_server_certificate].nil?
+    file_ldap["nas_server_id"] = resource[:nas_server_id] unless resource[:nas_server_id].nil?
+    file_ldap["password"] = resource[:password] unless resource[:password].nil?
+    file_ldap["port_number"] = resource[:port_number] unless resource[:port_number].nil?
+    file_ldap["principal"] = resource[:principal] unless resource[:principal].nil?
+    file_ldap["profile_DN"] = resource[:profile_dn] unless resource[:profile_dn].nil?
+    file_ldap["protocol"] = resource[:protocol] unless resource[:protocol].nil?
+    file_ldap["realm"] = resource[:realm] unless resource[:realm].nil?
+    return file_ldap
+  end
+
+  def build_update_hash(resource)
+    file_ldap = {}
+    file_ldap["add_addresses"] = resource[:add_addresses] unless resource[:add_addresses].nil?
+    file_ldap["addresses"] = resource[:addresses] unless resource[:addresses].nil?
+    file_ldap["authentication_type"] = resource[:authentication_type] unless resource[:authentication_type].nil?
+    file_ldap["base_DN"] = resource[:base_dn] unless resource[:base_dn].nil?
+    file_ldap["bind_DN"] = resource[:bind_dn] unless resource[:bind_dn].nil?
+    file_ldap["bind_password"] = resource[:bind_password] unless resource[:bind_password].nil?
+    file_ldap["is_smb_account_used"] = resource[:is_smb_account_used] unless resource[:is_smb_account_used].nil?
+    file_ldap["is_verify_server_certificate"] = resource[:is_verify_server_certificate] unless resource[:is_verify_server_certificate].nil?
+    file_ldap["password"] = resource[:password] unless resource[:password].nil?
+    file_ldap["port_number"] = resource[:port_number] unless resource[:port_number].nil?
+    file_ldap["principal"] = resource[:principal] unless resource[:principal].nil?
+    file_ldap["profile_DN"] = resource[:profile_dn] unless resource[:profile_dn].nil?
+    file_ldap["protocol"] = resource[:protocol] unless resource[:protocol].nil?
+    file_ldap["realm"] = resource[:realm] unless resource[:realm].nil?
+    file_ldap["remove_addresses"] = resource[:remove_addresses] unless resource[:remove_addresses].nil?
+    return file_ldap
+  end
+
+  def build_delete_hash(resource)
+    file_ldap = {}
+    return file_ldap
   end
 
   def build_hash(resource)
@@ -119,8 +163,8 @@ context.debug("Entered get")
   # end
 
   def delete(context, should)
-    new_hash = build_hash(should)
-    response = self.class.invoke_delete(context, should) # , new_hash)
+    new_hash = build_delete_hash(should)
+    response = self.class.invoke_delete(context, should, new_hash)
     if response.is_a? Net::HTTPSuccess
       should[:ensure] = 'absent'
       Puppet.info "Added 'absent' to property_hash"

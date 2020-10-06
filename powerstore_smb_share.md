@@ -1,7 +1,7 @@
-Document: "dellemc.swagger"
+Document: "swagger"
 
 
-Path: "/varhttps://github.com/aws/aws-sdk-go-v2/tree/master/dellemc.swagger.json")
+Path: "/varhttps://github.com/aws/aws-sdk-go-v2/tree/master/swagger.json")
 
 ## Smb_share
 
@@ -32,8 +32,8 @@ powerstore_smb_share {
 |is_branch_cache_enabled | Boolean | false |
 |is_continuous_availability_enabled | Boolean | false |
 |is_encryption_enabled | Boolean | false |
-|name | String[0,80] | true |
-|offline_availability | String | false |
+|name | String[1,80] | true |
+|offline_availability | Enum['Manual','Documents','Programs','None'] | false |
 |path | String | true |
 |umask | String | false |
 

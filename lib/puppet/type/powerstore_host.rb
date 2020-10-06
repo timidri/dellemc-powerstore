@@ -9,50 +9,45 @@ Puppet::ResourceApi.register_type(
   EOS
   attributes:   {
     ensure:      {
-      type: 'Enum[present, absent]',
-      desc: 'Whether this resource should be present or absent on the target system.',
-      default: 'present',
+      type: "Enum['present', 'absent']",
+      desc: "Whether this resource should be present or absent on the target system.",
+      default: "present",
     },
 
     add_initiators:          {
-      type:      'Optional[Array]',
+      type:      "Optional[Array[Struct[{Optional[chap_mutual_username] => String[1,64], Optional[chap_single_password] => String[12,64], Optional[chap_single_username] => String[1,64], port_name => String, port_type => Enum['iSCSI','FC'], Optional[chap_mutual_password] => String[12,64], }]]]",
       desc:      "The list of initiators to be added. CHAP username and password are optional.",
-      behaviour: :init_only,
     },
     description:          {
-      type:      'Optional[String[0,256]]',
+      type:      "Optional[String]",
       desc:      "An optional description for the host. The description should not be more than 256 UTF-8 characters long and should not have any unprintable characters.",
-      behaviour: :init_only,
     },
     id:          {
-      type:      'String',
+      type:      "String",
       desc:      "Unique id of the host.",
-      behaviour: :init_only,
     },
     initiators:          {
-      type:      'Array',
+      type:      "Array[Struct[{Optional[chap_mutual_password] => String[12,64], Optional[chap_mutual_username] => String[1,64], Optional[chap_single_password] => String[12,64], Optional[chap_single_username] => String[1,64], port_name => String, port_type => Enum['iSCSI','FC'], }]]",
       desc:      "",
       behaviour: :init_only,
     },
     modify_initiators:          {
-      type:      'Optional[Array]',
+      type:      "Optional[Array[Struct[{Optional[chap_mutual_username] => String[1,64], Optional[chap_single_password] => String[12,64], Optional[chap_single_username] => String[1,64], Optional[port_name] => String, Optional[chap_mutual_password] => String[12,64], }]]]",
       desc:      "Update list of existing initiators, identified by port_name, with new CHAP usernames and/or passwords.",
-      behaviour: :init_only,
     },
     name:          {
-      type:      'Optional[String[0,128]]',
+      type:      "String",
       desc:      "The host name. The name should not be more than 128 UTF-8 characters long and should not have any unprintable characters.",
       behaviour: :namevar,
     },
     os_type:          {
-      type:      'String',
+      type:      "Enum['Windows','Linux','ESXi','AIX','HP-UX','Solaris']",
       desc:      "Operating system of the host.",
       behaviour: :init_only,
     },
     remove_initiators:          {
-      type:      'Optional[Array]',
+      type:      "Optional[Array[String]]",
       desc:      "The list of initiator port_names to be removed.",
-      behaviour: :init_only,
     },
   },
   autorequires: {
