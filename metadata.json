@@ -1,6 +1,6 @@
 {
   "name": "timidri-powerstore",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "author": "Puppet and Dell",
   "summary": "Puppet module for managing Dell EMC PowerStore",
   "license": "Apache-2.0",
